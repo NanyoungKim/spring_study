@@ -1,6 +1,7 @@
 package nanyoung.nanyoungspring;
 
 import nanyoung.nanyoungspring.repository.JdbcMemberRepository;
+import nanyoung.nanyoungspring.repository.JdbcTemplateMemberRepository;
 import nanyoung.nanyoungspring.repository.MemberRepository;
 import nanyoung.nanyoungspring.repository.MemoryMemberRepository;
 import nanyoung.nanyoungspring.service.MemberService;
@@ -30,8 +31,11 @@ public class SpringConfig {
 
     @Bean
     public MemberRepository memberRepository(){
-        //return new MemoryMemberRepository();
-        return new JdbcMemberRepository(dataSource);
+        //1. 메모리에 저장하는 방식 return new MemoryMemberRepository();
+        //2. jdbc 전통 방식(디비에 저장) return new JdbcMemberRepository(dataSource);
+
+        //3. jdbc Template으로 중복된 코드 없애기(디비에 저장)
+        return new JdbcTemplateMemberRepository(dataSource);
     }
 }
 
