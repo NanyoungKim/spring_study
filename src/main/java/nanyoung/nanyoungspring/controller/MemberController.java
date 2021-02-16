@@ -4,8 +4,11 @@ import nanyoung.nanyoungspring.domain.Member;
 import nanyoung.nanyoungspring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 
 //spring 이 처음에 뜰 때 spring container라는 spring 통이 생김.
@@ -31,18 +34,30 @@ public class MemberController {
     }
 
 
+    //회원 등록 로직 1
     //url에 직접 치는 것을 get 방식이라고 함. 데이터 조회할 때 씀
     @GetMapping("/members/new")
     public String createForm(){
         return "members/createMemberForm";  //View Resolver 가 template에서 createMemberForm.html 을 찾아서 선택하고 thymeleaf에 렌더링 -> html파일이 화면에 뿌려짐
     }
 
+    //회원 등록 로직 2
     //post : 데이터 전달 시 씀
     @PostMapping("/members/new")
     public String create(MemberForm form){
         Member member = new Member();
         member.setName(form.getName()); //회원이 입력한 이름으로 설정됨
 
+        memberService.join(member);
+
         return ("redirect:/");
+    }
+
+    //회원 조회 로직 1
+    @GetMapping(value = "/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members); //모든 회원 조회해서 리스트에 담아놨음.
+        return "members/memberList";
     }
 }
